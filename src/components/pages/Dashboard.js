@@ -1,4 +1,5 @@
 import React,{ useState,useEffect } from 'react';
+import axios from 'axios'
 import { FaFilter } from 'react-icons/fa';
 import RecordList from '../etc/RecordList';
 import Nav from '../etc/Nav';
@@ -7,8 +8,34 @@ import 'tachyons';
 function Dashboard(){
 	const [filter,setFilter] = useState(null);
 	const [record,setRecord] = useState([]);
-	console.log('Record is',record);
-	
+	const [isLoaded,setIsLoaded] = useState(false);
+
+	useEffect(() => {
+      axios({
+      	method:'get',
+      	url:'http://localhost:3000/user/read/record',
+      	headers: {
+      		Authorization: 'Bearer ' + localStorage.getItem('item')
+      	}
+      })
+      .then(res => {
+      	setRecord(res.data);
+      	console.log('Update ',record);
+      	setIsLoaded(true);
+      })
+      .catch(err => console.log(err))
+	},[isLoaded])
+    let data;
+	if(record.length){
+			    data = record.map((value,index) => {
+			          	return <RecordList 
+					          {...value} 
+					          key={index}/>;
+			          })}
+	else{
+		data = <p>No records</p>
+	}
+	if(isLoaded){
 	return(
 		<div>
 		  <Nav />
@@ -43,14 +70,11 @@ function Dashboard(){
 			          <th className="fw6 tl pa3 bg-white">Phone Number</th>
 			          <th className="fw6 tl pa3 bg-white">Organization</th>
 			          <th className="fw6 tl pa3 bg-white">Ratings</th>
+			          <th className="fw6 tl pa3 bg-white"></th>
 			        </tr>
 			      </thead>
 			      <tbody className="lh-copy">
-			          {record.map((value,index) => {
-			          	return <RecordList 
-					          {...value} 
-					          key={index}/>;
-			          })}
+			          {data}
 			        
 			      </tbody>
 			    </table>
@@ -59,6 +83,8 @@ function Dashboard(){
 		  </div>
 		</div>
 		)
+} //if ends here
+else {return <h1>Loading</h1>}
 }
 
 export default Dashboard;

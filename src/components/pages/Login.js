@@ -1,9 +1,11 @@
-import React,{useEffect,useState} from 'react';
-import Nav from '../etc/Nav';
+import React,{useEffect,useState} from 'react'
+import Notifications, {notify} from 'react-notify-toast';
+import axios from 'axios'
+import Nav from '../etc/Nav'
 import {
   Link
-} from "react-router-dom";
-import 'tachyons';
+} from "react-router-dom"
+import 'tachyons'
 
 function Login(){
 	const [email,setEmail] = useState('');
@@ -23,12 +25,26 @@ function Login(){
 	return 0;
 	} 
 	else{
-	console.log("handleSubmit fired ")
+	axios.post('http://localhost:3000/api/auth/login',
+	{
+		email: email,
+		password: password
+	})
+	.then(res => {
+		let token = res.data.token.split(" ");
+		localStorage.setItem("item",token[1]);
+	})
+	.catch(err => {
+		console.log(err);
+		notify.show('alert!!!')
+	}
+		)
 	}  //else ends here
 	}
 	return(
 		<div>
 		<Nav />
+		<Notifications />
 	{/*this article makes things centered*/}
 		<article className="vh-100 dt w-100">
 			<div className="dtc v-mid tc black ph3 ph4-l">

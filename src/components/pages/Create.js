@@ -5,7 +5,7 @@ import Nav from '../etc/Nav';
 import '../../App.css';
 import 'tachyons';
 
-function Create(){
+function Create(props){
 	const [name,setName] = useState('');
 	const [date,setDate] = useState('');
 	const [phone,setPhone] = useState('');
@@ -31,6 +31,7 @@ function Create(){
 
 		}
 	} 
+	if(!props){
 	return(
 		<div>
 		<Nav />
@@ -107,6 +108,7 @@ function Create(){
 		</table>
 		</div>
 		)
+}
 }
 
 export default Create;
