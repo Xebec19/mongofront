@@ -37,7 +37,7 @@ function  RecordList(props){
 			setErr('');
 			/*notify.show('Done!');*/
 
-		}
+		};
 
 	function handleEdit(e){
 		e.preventDefault();
@@ -64,17 +64,18 @@ function  RecordList(props){
 			setPhone(res.data.phone);
 			setOrg(res.data.organization);
 			setRatings(res.data.ratings);
-			setMode(false);
+			setMode('read');
 			})
 			.catch(err => {
 			console.log(err);
+			return;
 			/*notify.show('alert!!!')*/
 			}
 			)
 			setErr('');
 			/*notify.show('Done!');*/
 
-		}
+		};
 
 	if(mode === 'read'){
 	 return (

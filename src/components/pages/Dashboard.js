@@ -6,9 +6,10 @@ import Nav from '../etc/Nav';
 import 'tachyons';
 
 function Dashboard(){
-	const [filter,setFilter] = useState(null);
+	const [filter,setFilter] = useState('rating');
 	const [record,setRecord] = useState([]);
 	const [isLoaded,setIsLoaded] = useState(false);
+	const [values,setValues] = useState(null);
 
 	useEffect(() => {
       axios({
@@ -19,22 +20,44 @@ function Dashboard(){
       	}
       })
       .then(res => {
-      	setRecord(res.data);
-      	console.log('Update ',record);
+      	/*setRecord(res.data);*/
+      	console.log('Value of filter',filter);
+		const filtered = res.data.sort(function(a, b) {
+		if(filter === "organization"){
+		var textA = a.organization.toUpperCase();
+		var textB = b.organization.toUpperCase();
+		return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+	    }
+	    else if(filter === 'rating'){
+	    	return a.ratings - b.ratings;
+	    }
+	    else if(filter === 'date'){
+	    	return new Date(b.date) - new Date(a.date);
+	    }
+		});
+		setRecord(filtered);
+		console.log('Update ',filtered,record);
       	setIsLoaded(true);
+		console.log('Original',record)
+		if(record.length){
+		let data = record.map((value,index) => {
+		console.log('Filtering');
+		return <RecordList 
+		{...value} 
+		key={index}
+		/>;
+		})
+		setValues(data);
+		}
+		else{
+		let data = <p>No records</p>
+		setValues(data);
+		}  	
       })
       .catch(err => console.log(err))
 	},[isLoaded,localStorage.getItem('item')])
-    let data;
-	if(record.length){
-			    data = record.map((value,index) => {
-			          	return <RecordList 
-					          {...value} 
-					          key={index}/>;
-			          })}
-	else{
-		data = <p>No records</p>
-	}
+
+    
 	if(isLoaded){
 	return(
 		<div>
@@ -46,14 +69,15 @@ function Dashboard(){
 			    <label htmlFor="filter">
 			    <FaFilter className="f6 w-100 mw8 center"/>
 			    </label>
-					<select className="f6 w-100 mw8 center" 
+					<select className="f6 w-100 mw8 center"
+					defaultValue={filter} 
 					onClick={(e) => setFilter(e.target.value)}
 					name="filter" id="filter">
 					  <option value="date">
 					  {`Date`}
 					  </option>
-					  <option value="organisation">
-					  {`Organisation`}
+					  <option value="organization">
+					  {`Organization`}
 					  </option>
 					  <option value="rating">
 					  {`Rating`}
@@ -74,7 +98,7 @@ function Dashboard(){
 			        </tr>
 			      </thead>
 			      <tbody className="lh-copy">
-			          {data}
+			          {values}
 			        
 			      </tbody>
 			    </table>
