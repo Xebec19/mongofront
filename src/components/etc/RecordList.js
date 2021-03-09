@@ -8,7 +8,7 @@ import 'moment-timezone';
 function  RecordList(props){
 	/*console.log(props._id);*/
 	const [err,setErr] = useState('');
-	const [mode,setMode] = useState(false);
+	const [mode,setMode] = useState('read');
 	const [name,setName] = useState(props.name);
 	const [date,setDate] = useState(props.date);
 	const [phone,setPhone] = useState(props.phone);
@@ -16,6 +16,29 @@ function  RecordList(props){
 	const [ratings,setRatings] = useState(props.ratings);
 	let dateget = props.date;
 	
+	function handleDelete(e){
+		e.preventDefault();
+		axios({
+			method:'delete',
+			url:`http://localhost:3000/user/delete/record/${props._id}`,
+			headers: {
+			Authorization: 'Bearer ' + localStorage.getItem('item')
+			}
+			})
+			.then(res => {
+			console.log(res);
+			setMode('delete');
+			})
+			.catch(err => {
+			console.log(err);
+			/*notify.show('alert!!!')*/
+			}
+			)
+			setErr('');
+			/*notify.show('Done!');*/
+
+		}
+
 	function handleEdit(e){
 		e.preventDefault();
 		const data = {
@@ -53,7 +76,7 @@ function  RecordList(props){
 
 		}
 
-	if(!mode){
+	if(mode === 'read'){
 	 return (
 	  <tr className="stripe-dark">
 	  <td className="pa3">{name}</td>
@@ -66,12 +89,12 @@ function  RecordList(props){
       <td className="pa3">{org}</td>
       <td className="pa3">{ratings}</td>
       <td className="pa3">
-      <p className="pointer dim" onClick={() => setMode(true)}>Edit</p>
-      <p className="pointer dim">Delete</p>
+      <p className="pointer dim" onClick={() => setMode('edit')}>Edit</p>
+      <p className="pointer dim" onClick={handleDelete}>Delete</p>
       </td>
       </tr>
 		)}  //if ends here
-	 else{
+	 else if(mode === 'edit'){
 	 	return(
 		<tr className="stripe-dark">
 		<td className="pa3">
@@ -112,12 +135,19 @@ function  RecordList(props){
 		Submit
 		</p>
 		<p 
-		onClick = {() => setMode(false)}
+		onClick = {() => setMode('read')}
 		className="pointer dim">
 		Cancel
 		</p>
 		</td>
 		</tr>
+	 		)
+	 }  //else if ends here
+	 else if(mode === 'delete'){
+	 	return(
+			<tr className="stripe-dark">
+			<td className="pa3">Record Deleted</td>
+			</tr>
 	 		)
 	 }
 }
