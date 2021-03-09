@@ -2,6 +2,8 @@ import React from 'react'
 import {
   BrowserRouter as Router,
   Switch,
+  useHistory,
+  Redirect,
   Route
 } from "react-router-dom";
 import Login from './components/pages/Login';
@@ -11,26 +13,32 @@ import Create from './components/pages/Create';
 import './App.css';
 
 function App() {
+  /*var history = useHistory();
+
+  const route = (props) => {
+    console.log('clicked',props);
+  }*/
+
   return (
     <Router>
       <Switch>
         <Route exact path="/">
           <Login />
         </Route>
-
+{/*
         <Route exact path="/view/:id">
           <Login />
-        </Route>
+        </Route>*/}
 
         <Route exact path="/register">
           <Register />
         </Route>
         
-        <Route path="/dashboard/create">
+        <Route exact path="/dashboard/create">
           <Create />
         </Route>
         
-        <Route path="/dashboard">
+        <Route exact path="/dashboard">
           <Dashboard />
         </Route>
 

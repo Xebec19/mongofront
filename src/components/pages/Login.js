@@ -3,11 +3,13 @@ import Notifications, {notify} from 'react-notify-toast';
 import axios from 'axios'
 import Nav from '../etc/Nav'
 import {
-  Link
+  Link,
+  useHistory
 } from "react-router-dom"
 import 'tachyons'
 
-function Login(){
+function Login(props){
+	/*const history = useHistory();*/
 	const [email,setEmail] = useState('');
 	const [password,setPassword] = useState('');
 	const [error,setError] = useState('');
@@ -19,7 +21,7 @@ function Login(){
 		return (false)
 		}
 
-	function handleSubmit(props){
+	function handleSubmit(){
 	if(email==='' || password==='' || !valdEmail()){ 
 	setError('Invalid credentials');
 	return 0;
@@ -33,6 +35,7 @@ function Login(){
 	.then(res => {
 		let token = res.data.token.split(" ");
 		localStorage.setItem("item",token[1]);
+		console.log("Fired");
 	})
 	.catch(err => {
 		console.log(err);
@@ -71,12 +74,13 @@ function Login(){
 				    </fieldset>
 				    {error && <p style={{color:"red"}}> Invalid </p>}
 				    <div className="">
-				      <Link 
+				      <p 
+				      to={`dashboard`}
 				      className="b ph3 link pv2 input-reset ba b--black black bg-transparent dim pointer f6 dib" 
 				      onClick={() => handleSubmit()}
-				      to={`dashboard`}>
+				      >
 				      Login
-				      </Link>
+				      </p>
 				    </div>
 				    <div className="lh-copy mt3">
 				      <Link to="register" className="f6 link dim black db">Need an account ?</Link>

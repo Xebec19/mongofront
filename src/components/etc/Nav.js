@@ -8,12 +8,11 @@ import 'tachyons';
 function Nav(){
   
   const signout = () => {
-    console.log("Fired signout")
+    localStorage.clear();
   }  //signout ends here
 
   const id = 'asd';
   const location = useLocation();
-  console.log(`location is ${location.pathname}`);
   let navLinks;
   if(location.pathname === '/' || location.pathname === '/register'){
   	navLinks = (

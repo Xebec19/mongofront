@@ -1,9 +1,13 @@
 import React,{useState} from 'react';
+import Notifications, {notify} from 'react-notify-toast';
+import axios from 'axios'
 import 'tachyons';
 import Moment from 'react-moment';
 import 'moment-timezone';
 
 function  RecordList(props){
+	/*console.log(props._id);*/
+	const [err,setErr] = useState('');
 	const [mode,setMode] = useState(false);
 	const [name,setName] = useState(props.name);
 	const [date,setDate] = useState(props.date);
@@ -11,20 +15,58 @@ function  RecordList(props){
 	const [org,setOrg] = useState(props.organization);
 	const [ratings,setRatings] = useState(props.ratings);
 	let dateget = props.date;
+	
+	function handleEdit(e){
+		e.preventDefault();
+		const data = {
+			name: name,
+			data: date,
+			phone: phone,
+			organization: org,
+			ratings: ratings
+		}
+		axios({
+			method:'patch',
+			url:`http://localhost:3000/user/update/record/${props._id}`,
+			data: data,
+			headers: {
+			Authorization: 'Bearer ' + localStorage.getItem('item')
+			}
+			})
+			.then(res => {
+			console.log(res);
+			setName(res.data.name);
+			setDate(res.data.date);
+			dateget=res.data.date;
+			setPhone(res.data.phone);
+			setOrg(res.data.organization);
+			setRatings(res.data.ratings);
+			setMode(false);
+			})
+			.catch(err => {
+			console.log(err);
+			/*notify.show('alert!!!')*/
+			}
+			)
+			setErr('');
+			/*notify.show('Done!');*/
+
+		}
+
 	if(!mode){
 	 return (
 	  <tr className="stripe-dark">
-	  <td className="pa3">{props.name}</td>
+	  <td className="pa3">{name}</td>
       <td className="pa3">
       <Moment format="YYYY/MM/DD">
       {dateget}
       </Moment>
       </td>
-      <td className="pa3">{props.phone}</td>
-      <td className="pa3">{props.organization}</td>
-      <td className="pa3">{props.ratings}</td>
+      <td className="pa3">{phone}</td>
+      <td className="pa3">{org}</td>
+      <td className="pa3">{ratings}</td>
       <td className="pa3">
-      <p className="pointer dim" onClick={() => setMode(true)}>View</p>
+      <p className="pointer dim" onClick={() => setMode(true)}>Edit</p>
       <p className="pointer dim">Delete</p>
       </td>
       </tr>
@@ -64,7 +106,16 @@ function  RecordList(props){
 		</input>
 		</td>
 		<td className="pa3">
-		<p className="pointer dim">Submit</p>
+		<p 
+		onClick={handleEdit}
+		className="pointer dim">
+		Submit
+		</p>
+		<p 
+		onClick = {() => setMode(false)}
+		className="pointer dim">
+		Cancel
+		</p>
 		</td>
 		</tr>
 	 		)

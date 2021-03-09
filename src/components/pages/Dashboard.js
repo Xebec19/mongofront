@@ -24,7 +24,7 @@ function Dashboard(){
       	setIsLoaded(true);
       })
       .catch(err => console.log(err))
-	},[isLoaded])
+	},[isLoaded,localStorage.getItem('item')])
     let data;
 	if(record.length){
 			    data = record.map((value,index) => {

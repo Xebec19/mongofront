@@ -1,5 +1,6 @@
 import React,{useState,useEffect} from 'react';
 import Notifications, {notify} from 'react-notify-toast';
+import axios from 'axios'
 import Nav from '../etc/Nav';
 
 import '../../App.css';
@@ -20,18 +21,46 @@ function Create(props){
 	 ratings: ratings
 	}
 	function handleSubmit(){
-		if(name === '' || date=== '' || phone < 10000000 || ratings === ''){
+		if(name === '' || date=== '' || phone < 10000000 || ratings===""){
 			setErr('Invalid');
 			return 0;
 		}
 		else{
-			console.log("Fired handle Submit");
+			/*axios.post('http://localhost:3000/user/create/record',
+			{
+			name: name,
+			date: date,
+			phone: phone,
+			ratings: ratings
+			})*/
+			const data = {
+			name: name,
+			date: date,
+			phone: phone,
+			organization: org,
+			ratings: ratings
+			}
+			axios({
+			method:'post',
+			url:'http://localhost:3000/user/create/record',
+			data: data,
+			headers: {
+			Authorization: 'Bearer ' + localStorage.getItem('item')
+			}
+			})
+			.then(res => {
+			console.log(res)
+			})
+			.catch(err => {
+			console.log(err);
+			notify.show('alert!!!')
+			}
+			)
 			setErr('');
 			notify.show('Done!');
 
 		}
 	} 
-	if(!props){
 	return(
 		<div>
 		<Nav />
@@ -108,7 +137,6 @@ function Create(props){
 		</table>
 		</div>
 		)
-}
 }
 
 export default Create;
