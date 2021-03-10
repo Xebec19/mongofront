@@ -74,13 +74,13 @@ function Login(props){
 				    </fieldset>
 				    {error && <p style={{color:"red"}}> Invalid </p>}
 				    <div className="">
-				      <p 
-				      to={`dashboard`}
+				      <Link 
+				      to={`/dashboard`}
 				      className="b ph3 link pv2 input-reset ba b--black black bg-transparent dim pointer f6 dib" 
 				      onClick={() => handleSubmit()}
 				      >
 				      Login
-				      </p>
+				      </Link>
 				    </div>
 				    <div className="lh-copy mt3">
 				      <Link to="register" className="f6 link dim black db">Need an account ?</Link>

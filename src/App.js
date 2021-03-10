@@ -9,6 +9,7 @@ import {
 import Login from './components/pages/Login';
 import Register from './components/pages/Register';
 import Dashboard from './components/pages/Dashboard';
+import {Protected} from './components/etc/Protected'
 import Create from './components/pages/Create';
 import './App.css';
 
@@ -37,11 +38,13 @@ function App() {
         <Route exact path="/dashboard/create">
           <Create />
         </Route>
-        
+        {/*
         <Route exact path="/dashboard">
           <Dashboard />
-        </Route>
+        </Route>*/}
 
+        <Protected exact path="/dashboard" component={Dashboard}/>
+        <Route path="*" component={() => "404 error!!"} />
       </Switch>
     </Router>
   );

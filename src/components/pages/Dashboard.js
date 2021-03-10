@@ -6,7 +6,7 @@ import Nav from '../etc/Nav';
 import 'tachyons';
 
 function Dashboard(){
-	const [filter,setFilter] = useState('rating');
+	const [filter,setFilter] = useState('organization');
 	const [record,setRecord] = useState([]);
 	const [isLoaded,setIsLoaded] = useState(false);
 	const [values,setValues] = useState(null);
@@ -21,8 +21,17 @@ function Dashboard(){
       })
       .then(res => {
       	/*setRecord(res.data);*/
-      	console.log('Value of filter',filter);
-		const filtered = res.data.sort(function(a, b) {
+		setRecord(res.data);
+      	setIsLoaded(true);
+      	filterRecords();
+
+      })
+      .catch(err => console.log(err))
+	},[isLoaded,localStorage.getItem('item')]);
+
+	/*console.log('Value of filter',filter);*/
+	/*function filterRecords() {
+		const filtered = record.sort(function(a, b) {
 		if(filter === "organization"){
 		var textA = a.organization.toUpperCase();
 		var textB = b.organization.toUpperCase();
@@ -34,13 +43,37 @@ function Dashboard(){
 	    else if(filter === 'date'){
 	    	return new Date(b.date) - new Date(a.date);
 	    }
-		});
-		setRecord(filtered);
-		console.log('Update ',filtered,record);
-      	setIsLoaded(true);
-		console.log('Original',record)
-		if(record.length){
-		let data = record.map((value,index) => {
+		}
+		/*,setRecord(filtered)
+		console.log(filtered)
+		/*loadRecords()
+		);
+	}  //filterRecords ends here
+*/
+	function filterRecords(){
+	const filtered = record.sort(function(a, b) {
+	if(filter === "organization"){
+	var textA = a.organization.toUpperCase();
+	var textB = b.organization.toUpperCase();
+	return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+    }
+    else if(filter === 'rating'){
+    	return a.ratings - b.ratings;
+    }
+    else if(filter === 'date'){
+    	return new Date(b.date) - new Date(a.date);
+    }
+	}
+	)
+	console.log("Value of filtered",filtered);
+	loadRecords(filtered);
+}
+
+	function loadRecords(props){
+
+	console.log('Value passed to landRecords',props);
+	if(props.length){
+		let data = props.map((value,index) => {
 		console.log('Filtering');
 		return <RecordList 
 		{...value} 
@@ -52,10 +85,8 @@ function Dashboard(){
 		else{
 		let data = <p>No records</p>
 		setValues(data);
-		}  	
-      })
-      .catch(err => console.log(err))
-	},[isLoaded,localStorage.getItem('item')])
+		}
+	}  //loadRecords ends here
 
     
 	if(isLoaded){
@@ -72,6 +103,7 @@ function Dashboard(){
 					<select className="f6 w-100 mw8 center"
 					defaultValue={filter} 
 					onClick={(e) => setFilter(e.target.value)}
+					onChange={filterRecords}
 					name="filter" id="filter">
 					  <option value="date">
 					  {`Date`}
@@ -98,6 +130,7 @@ function Dashboard(){
 			        </tr>
 			      </thead>
 			      <tbody className="lh-copy">
+			         
 			          {values}
 			        
 			      </tbody>
