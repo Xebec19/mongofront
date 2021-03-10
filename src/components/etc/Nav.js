@@ -11,7 +11,6 @@ function Nav(){
     localStorage.clear();
   }  //signout ends here
 
-  const id = 'asd';
   const location = useLocation();
   let navLinks;
   if(location.pathname === '/' || location.pathname === '/register'){

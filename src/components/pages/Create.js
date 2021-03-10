@@ -1,4 +1,4 @@
-import React,{useState,useEffect} from 'react';
+import React,{useState} from 'react';
 import Notifications, {notify} from 'react-notify-toast';
 import axios from 'axios'
 import Nav from '../etc/Nav';
@@ -13,13 +13,6 @@ function Create(props){
 	const [org,setOrg] = useState('Org1');
 	const [ratings,setRatings] = useState('');
 	const [err,setErr] = useState('');
-	const object = {
-	 name: name,
-	 date: date,
-	 phone: phone,
-	 org: org,
-	 ratings: ratings
-	}
 	function handleSubmit(){
 		if(name === '' || date=== '' || phone < 10000000 || ratings===""){
 			setErr('Invalid');

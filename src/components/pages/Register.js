@@ -1,4 +1,6 @@
-import React,{ useState,useEffect } from 'react';
+import React,{ useState} from 'react';
+import axios from 'axios'
+import Notifications, {notify} from 'react-notify-toast';
 import Nav from '../etc/Nav';
 import {
   Link
@@ -8,6 +10,7 @@ import 'tachyons';
 
 function Register(){
 	const [email,setEmail] = useState('');
+	const [name,setName] = useState('');
 	const [password,setPassword] = useState('');
 	const [error,setError] = useState('');
 	
@@ -25,7 +28,21 @@ function Register(){
 		return 0;
 		} 
 		else{
-		
+			axios.post('http://localhost:3000/api/auth/register',
+	{
+		name: name,
+		email: email,
+		password: password
+	})
+	.then(res => {
+				  console.log(res);
+	    	})
+	.catch(err => {
+		console.log(err);
+		notify.show('alert!!!')
+	}
+		)
+
 		}  //else ends here
 		}  //handleSubmit ends here
 
@@ -53,6 +70,19 @@ function Register(){
 				        id="email-address" 
 				        onChange={(e) => setEmail(e.target.value)}/>
 				      </div>
+
+				      <div className="mt3">
+				        <label className="db fw6 lh-copy f6" htmlFor="name">
+				        Name
+				        </label>
+				        <input 
+				        className="pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100" 
+				        type="text" 
+				        name="name"  
+				        id="name" 
+				        onChange={(e) => setName(e.target.value)}/>
+				      </div>
+
 				      <div className="mv3">
 				        <label className="db fw6 lh-copy f6" htmlFor="password">Password</label>
 				        <input 
@@ -69,7 +99,7 @@ function Register(){
 				      <Link
 				      className="b ph3 link pv2 input-reset ba b--black black bg-transparent dim pointer f6 dib" 
 				      onClick={() => handleSubmit()}
-				      to={`/dashboard/${email}`}>
+				      to={`/`}>
 				      Register
 				      </Link>
 				    </div>

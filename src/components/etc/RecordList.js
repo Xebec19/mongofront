@@ -1,5 +1,4 @@
 import React,{useState} from 'react';
-import Notifications, {notify} from 'react-notify-toast';
 import axios from 'axios'
 import 'tachyons';
 import Moment from 'react-moment';

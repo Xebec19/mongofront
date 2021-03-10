@@ -1,10 +1,10 @@
-import React,{useEffect,useState} from 'react'
+import React,{useState} from 'react'
 import Notifications, {notify} from 'react-notify-toast';
 import axios from 'axios'
+import auth from '../etc/auth.js'
 import Nav from '../etc/Nav'
 import {
-  Link,
-  useHistory
+  Link
 } from "react-router-dom"
 import 'tachyons'
 
@@ -36,12 +36,20 @@ function Login(props){
 		let token = res.data.token.split(" ");
 		localStorage.setItem("item",token[1]);
 		console.log("Fired");
+		auth.login(() => {
+				      		props.history.push("/dashboard")
+				      	})
 	})
 	.catch(err => {
 		console.log(err);
 		notify.show('alert!!!')
 	}
 		)
+		/*const data = {
+			email: email,
+			password: password
+		}*/
+		auth.login();
 	}  //else ends here
 	}
 	return(
@@ -74,13 +82,14 @@ function Login(props){
 				    </fieldset>
 				    {error && <p style={{color:"red"}}> Invalid </p>}
 				    <div className="">
-				      <Link 
-				      to={`/dashboard`}
+				      <button 
+				      onClick={() => {
+				      	handleSubmit()
+				      }}
 				      className="b ph3 link pv2 input-reset ba b--black black bg-transparent dim pointer f6 dib" 
-				      onClick={() => handleSubmit()}
 				      >
 				      Login
-				      </Link>
+				      </button>
 				    </div>
 				    <div className="lh-copy mt3">
 				      <Link to="register" className="f6 link dim black db">Need an account ?</Link>
