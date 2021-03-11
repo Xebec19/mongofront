@@ -14,7 +14,7 @@ function Dashboard(){
 	useEffect(() => {
       axios({
       	method:'get',
-      	url:'http://localhost:3000/user/read/record',
+      	url:'https://calm-forest-91848.herokuapp.com/user/read/record',
       	headers: {
       		Authorization: 'Bearer ' + localStorage.getItem('item')
       	}

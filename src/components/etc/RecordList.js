@@ -19,7 +19,7 @@ function  RecordList(props){
 		e.preventDefault();
 		axios({
 			method:'delete',
-			url:`http://localhost:3000/user/delete/record/${props._id}`,
+			url:`https://calm-forest-91848.herokuapp.com/user/delete/record/${props._id}`,
 			headers: {
 			Authorization: 'Bearer ' + localStorage.getItem('item')
 			}
@@ -49,7 +49,7 @@ function  RecordList(props){
 		}
 		axios({
 			method:'patch',
-			url:`http://localhost:3000/user/update/record/${props._id}`,
+			url:`https://calm-forest-91848.herokuapp.com/user/update/record/${props._id}`,
 			data: data,
 			headers: {
 			Authorization: 'Bearer ' + localStorage.getItem('item')

@@ -35,7 +35,7 @@ function Create(props){
 			}
 			axios({
 			method:'post',
-			url:'http://localhost:3000/user/create/record',
+			url:'https://calm-forest-91848.herokuapp.com/user/create/record',
 			data: data,
 			headers: {
 			Authorization: 'Bearer ' + localStorage.getItem('item')

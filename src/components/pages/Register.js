@@ -28,7 +28,7 @@ function Register(){
 		return 0;
 		} 
 		else{
-			axios.post('http://localhost:3000/api/auth/register',
+			axios.post('https://calm-forest-91848.herokuapp.com/api/auth/register',
 	{
 		name: name,
 		email: email,
