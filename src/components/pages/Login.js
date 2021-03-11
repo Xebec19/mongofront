@@ -1,4 +1,4 @@
-import React,{useState} from 'react'
+import React,{useState,useEffect} from 'react'
 import Notifications, {notify} from 'react-notify-toast';
 import axios from 'axios'
 import auth from '../etc/auth.js'
@@ -10,6 +10,7 @@ import 'tachyons'
 
 function Login(props){
 	/*const history = useHistory();*/
+	const [isawake,setAwake] = useState(false);
 	const [email,setEmail] = useState('');
 	const [password,setPassword] = useState('');
 	const [error,setError] = useState('');
@@ -20,6 +21,12 @@ function Login(props){
 		}
 		return (false)
 		}
+
+	useEffect(() => {
+		axios.get('https://calm-forest-91848.herokuapp.com/api/auth/')
+		.then(res => setAwake(true))
+		.catch(err => console.log(err))
+	},[])
 
 	function handleSubmit(){
 	if(email==='' || password==='' || !valdEmail()){ 
@@ -51,6 +58,13 @@ function Login(props){
 		}*/
 		auth.login();
 	}  //else ends here
+	}
+	if(!isawake){
+		return (
+			<div>
+			<h1>Waking up the server, it might take a minute</h1>
+			</div>
+			)
 	}
 	return(
 		<div>
